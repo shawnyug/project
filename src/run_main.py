@@ -19,7 +19,7 @@ torch.autograd.set_detect_anomaly(True)
 
 parser = argparse.ArgumentParser(description='imputeST model')
 parser.add_argument("--experiment_name", type=str, default=None)
-parser.add_argument("--data_path", type=str, default="/media/xiangyu/data/imputation/DataUpload", required=False)
+parser.add_argument("--data_path", type=str, default="./data/imputation/DataUpload", required=False)
 parser.add_argument("--data_id", type=str, default="Dataset9", required=False)
 parser.add_argument('--batch_size', default=1024, type=int, help='number of batch_size')
 parser.add_argument("--min_cells", type=int, default=1)
@@ -96,7 +96,7 @@ if __name__ == '__main__':
     sc.settings.set_figure_params(vector_friendly=True)
 
     # load & process data
-    data_root = os.path.join("../data", args.data_id)
+    data_root = os.path.join("./data", args.data_id)
     seq_data = sc.read_h5ad(f"{data_root}_sc.h5ad")
     spatial_data = sc.read_h5ad(f"{data_root}_st.h5ad")
 

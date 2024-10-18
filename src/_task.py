@@ -69,7 +69,7 @@ class CTLTrainingPlan(TrainingPlan):
             rec_loss = sum([scl.reconstruction_loss_sum for scl in loss_output_objs])
             kl = sum([scl.kl_local_sum for scl in loss_output_objs])
 
-            print(f"{key} forward, total_loss:{loss:.3f} | contra_loss:{contra_loss*5:.3f} | mmd_loss:{mmd_loss:.3f} | kl_loss:{(kl/n_obs):.3f} | rec_loss:{(rec_loss/n_obs):.3f}")
+            print(f"{key} forward, total_loss:{loss:.3f} | contra_loss:{contra_loss*5:.3f} | kl_loss:{(kl/n_obs):.3f} | rec_loss:{(rec_loss/n_obs):.3f}")
             #print(f"{key} forward, total_loss:{loss:.3f} | contra_loss:{contra_loss:.3f} | cross_kl:{torch.sum(cross_modal_kl)/n_obs:.3f} | kl_loss:{(kl / n_obs):.3f} | rec_loss:{(rec_loss / n_obs):.3f}")
 
 

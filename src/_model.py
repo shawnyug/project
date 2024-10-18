@@ -14,8 +14,8 @@ from torch.utils.data import (
 from anndata.experimental.pytorch import AnnLoader
 
 from scvi import REGISTRY_KEYS, settings
-from model._utils import parse_device_args
-from model.base import BaseModelClass, VAEMixin
+from scvi.model._utils import parse_device_args
+from scvi.model.base import BaseModelClass, VAEMixin
 from scvi.train import Trainer
 from scvi.utils._docstrings import devices_dsp
 import data_processing
@@ -289,7 +289,7 @@ class STFormer(VAEMixin, BaseModelClass):
         ).format(n_latent, n_inputs, total_genes, n_batches, generative_distributions)
         self.init_params_ = self._get_init_params(locals())
 
-    @devices_dsp.dedent
+    #@devices_dsp.dedent
     def train(
         self,
         max_epochs: int = 200,
@@ -662,6 +662,37 @@ class STFormer(VAEMixin, BaseModelClass):
             model_save_path,
         )
 
+    @classmethod
+    #@setup_anndata_dsp.dedent
+    def setup_anndata(
+        cls,
+        adata: AnnData,
+        batch_key: Optional[str] = None,
+        labels_key: Optional[str] = None,
+        layer: Optional[str] = None,
+        index: Optional[str] = None,
+        **kwargs,
+    ):
+        """%(summary)s.
+
+        Parameters
+        ----------
+        %(param_batch_key)s
+        %(param_labels_key)s
+        %(param_layer)s
+        """
+        setup_method_args = cls._get_setup_method_args(**locals())
+        anndata_fields = [
+            LayerField(REGISTRY_KEYS.X_KEY, layer, is_count_data=True),
+            CategoricalObsField(REGISTRY_KEYS.BATCH_KEY, batch_key),
+            CategoricalObsField(REGISTRY_KEYS.LABELS_KEY, labels_key),
+            NumericalObsField(REGISTRY_KEYS.INDICES_KEY, index),
+        ]
+        adata_manager = AnnDataManager(
+            fields=anndata_fields, setup_method_args=setup_method_args
+        )
+        adata_manager.register_fields(adata, **kwargs)
+        cls.register_manager(adata_manager)
 
 # class TrainDL(DataLoader):
 #     """Train data loader."""
